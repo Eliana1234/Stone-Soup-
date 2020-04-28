@@ -1,14 +1,323 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width initial-scale=1.0'>
-    <title>Boilermaker</title>
+<head>
+    <title>Stone Soup Game</title>
     <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
     <script defer src="/bundle.js"></script>
   </head>
-  <body>
+<body style="display:flex; justify-content: center;">
     <div id="app"></div>
-  </body>
-</html>
+    <script>
+  var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    },
+  };
 
+var game = new Phaser.Game(config);
+
+
+function preload ()
+{
+  this.load.image('sky', 'assets/sky.png');
+  this.load.image('ground', 'assets/platform.png');
+  this.load.image('star', 'assets/star.png');
+  this.load.image('stone', 'assets/stone.png');
+  this.load.image('pot', 'assets/pot.png');
+  this.load.spritesheet('dude',
+      'assets/dude.png',
+      { frameWidth: 32, frameHeight: 48 }
+  );
+  this.load.spritesheet('goodFood',
+      'assets/goodFood.png',
+      { frameWidth: 32, frameHeight: 32 }
+  );
+}
+
+var platforms;
+var player;
+var stars;
+var pot;
+
+var highScore = 0;
+var totalScore = 0;
+var startGameCount = 0;
+
+function create ()
+
+{
+
+  this.add.image(400, 300, 'sky');
+  // this.add.image(400, 300, 'star');
+
+  pot = this.physics.add.staticGroup();
+  platforms = this.physics.add.staticGroup();
+
+platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+pot.create(700, 475, 'pot')
+
+player = this.physics.add.sprite(100, 450, 'dude');
+
+player.setBounce(0.2);
+player.setCollideWorldBounds(true);
+
+player.setInteractive()
+
+scoreText = this.add.text(16, 16, 'vegetables: 0', { fontSize: '32px', fill: '#000' });
+
+
+this.anims.create({
+  key: 'left',
+  frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+  frameRate: 10,
+  repeat: -1
+});
+
+this.anims.create({
+  key: 'turn',
+  frames: [ { key: 'dude', frame: 4 } ],
+  frameRate: 20
+});
+
+this.anims.create({
+  key: 'right',
+  frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+  frameRate: 10,
+  repeat: -1
+});
+
+// this.physics.add.collider(player, pot);
+this.physics.add.collider(player, platforms);
+this.physics.add.collider(pot, platforms);
+
+cursors = this.input.keyboard.createCursorKeys();
+
+manyRocks = this.physics.add.group()
+
+function startGame(manyRocks) {
+
+totalScore = 0;
+startGameCount++
+
+if (this.gameOver){
+gameOver.setText('');
+}
+if (this.highScoreReader){
+highScoreReader.setText('');
+}
+startButton.setText('');
+
+manyRocks.createMultiple({
+  key: 'stone',
+  // repeat: 11,
+  setXY: { x: 300, y: 0, stepX: 70 }
+})
+
+// manyRocks.children.iterate(function (child) {
+//     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+// });
+
+}
+
+if (totalScore > highScore){
+  highScore = totalScore;
+}
+
+if (startGameCount === 0){
+startButton = this.add.text(300, 100, 'Start Game',{border: '#000', fontSize: '32px', fill: '#000' })
+startButton.setInteractive()
+startButton.on('pointerdown', () => startGame(manyRocks))
+startButton.on('pointerover', () => enterButtonHoverState() )
+startButton.on('pointerout', () => enterButtonRestState() );
+}
+else if (startGameCount > 0 && highScore === 0){
+gameOver = this.add.text(300, 100, 'Game over', { fontSize: '32px', fill: '#000' })
+highScoreReader = this.add.text(100, 125, `Don't let the rocks hit the ground!`, { fontSize: '32px', fill: '#000' })
+startButton = this.add.text(300, 150, 'restart game?',{ fontSize: '32px', fill: '#000' })
+startButton.setInteractive()
+startButton.on('pointerdown', () => startGame(manyRocks))
+startButton.on('pointerover', () => enterButtonHoverState() )
+startButton.on('pointerout', () => enterButtonRestState() );
+}
+else {
+gameOver = this.add.text(300, 100, 'Game over', { fontSize: '32px', fill: '#000' })
+highScoreReader = this.add.text(300, 125, `Your high score: ${highScore}`, { fontSize: '32px', fill: '#000' })
+startButton = this.add.text(300, 150, 'restart game?', { fontSize: '32px', fill: '#000' })
+startButton.setInteractive()
+startButton.on('pointerdown', () => startGame(manyRocks))
+startButton.on('pointerover', () => enterButtonHoverState() )
+startButton.on('pointerout', () => enterButtonRestState() );
+}
+
+function enterButtonHoverState() {
+  startButton.setStyle({ fill: '#ff0'});
+}
+
+function enterButtonRestState() {
+  startButton.setStyle({ fill: '#000' });
+}
+
+
+this.physics.add.overlap(manyRocks, platforms, checkRocks, null, this);
+
+this.physics.add.overlap(player, manyRocks, collectRocks, null, this);
+
+let rockCount = 0;
+
+function collectRocks (player, manyRocks)
+{
+manyRocks.disableBody(true, true);
+rockCount = rockCount + 1
+console.log('ROCK COUNT', rockCount)
+}
+
+function checkRocks(platforms, manyRocks)
+{
+console.log('HIT CHECK ROCKS')
+manyRocks.disableBody(true, true);
+if (rockCount === 0){
+  this.scene.restart();
+}
+}
+
+
+this.physics.add.collider(pot, player, dropInPot, null, this);
+
+var x = 0;
+
+function dropInPot(){
+
+if (cursors.down.isDown && player.body.touching.down && rockCount > 0){
+
+singleStone = this.physics.add.group();
+
+singleStone.createMultiple({
+    key: 'stone',
+    setXY: {x: player.x, y: player.y}
+})
+
+rockCount = rockCount - 1
+
+this.physics.add.collider(pot, singleStone);
+
+singleStone.children.iterate(function (child) {
+child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+});
+
+x = x + 1
+
+vegetableFood = this.physics.add.group()
+
+vegetableFood.createMultiple({
+  key: 'goodFood',
+  frame: Phaser.Utils.Array.NumberArray(0, 37),
+  randomFrame: true,
+  repeat: x,
+})
+
+console.log('VEGGIE COUNT', x)
+
+var points = 37 * x;
+console.log('POINTS', points)
+
+totalScore = totalScore + points;
+console.log('SCORE after points add', totalScore)
+scoreText.setText(`vegetables: ${totalScore}`);
+
+manyRocks.createMultiple({
+    key: 'stone',
+})
+
+vegetableFood.children.iterate((child) => {
+
+  let y = Phaser.Math.Between(-200, -2000)
+  let x = Phaser.Math.Between(0, 800)
+
+  child.setY(y)
+  child.setX(x)
+  child.setMaxVelocity(200)
+
+})
+
+this.physics.add.collider(vegetableFood, platforms);
+
+vegetableFood.children.iterate(function (child) {
+child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+});
+
+manyRocks.children.iterate((child) => {
+
+let y = Phaser.Math.Between(-200, -2000)
+let x = Phaser.Math.Between(0, 600)
+
+child.setY(y)
+child.setX(x)
+child.setMaxVelocity(200)
+
+})
+
+// this.physics.add.collider(manyRocks, platforms);
+
+// manyRocks.children.iterate(function (child) {
+// child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+// });
+
+}
+
+
+}
+
+}
+
+
+
+function update ()
+{
+if (cursors.left.isDown)
+{
+  player.setVelocityX(-160);
+
+  player.anims.play('left', true);
+}
+else if (cursors.right.isDown)
+{
+  player.setVelocityX(160);
+
+  player.anims.play('right', true);
+}
+else
+{
+  player.setVelocityX(0);
+
+  player.anims.play('turn');
+}
+
+if (cursors.up.isDown && player.body.touching.down)
+{
+  player.setVelocityY(-330);
+}
+
+if (cursors.up.isDown && player.body.touching.down)
+  {
+      player.body.velocity.y = -350;
+  }
+
+}
+
+
+    </script>
+</body>
+</html>

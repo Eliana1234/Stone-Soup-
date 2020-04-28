@@ -1,4 +1,4 @@
-body {
+/* body {
   font-family: sans-serif;
 }
 
@@ -18,4 +18,16 @@ nav a {
 form div {
   margin: 1em;
   display: inline-block;
+} */
+
+/* .page {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+} */
+
+.app {
+  position: absolute;
+  top: 8px;
+  right: 16px;
 }
