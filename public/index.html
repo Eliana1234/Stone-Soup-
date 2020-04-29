@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
     <script defer src="/bundle.js"></script>
   </head>
-<body id="body" style="display:flex; justify-content: center;">
+<body id="body" style="display:flex;">
     <div id="app"></div>
     <script>
   var config = {
@@ -25,12 +25,12 @@
         create: create,
         update: update
     },
-    scale: {
-      // parent: "body",
-      mode: Phaser.Scale.FIT,
-      // width: 800,
-      // height: 600
-    }
+    // scale: {
+    //   parent: "body",
+    //   mode: Phaser.Scale.FIT,
+    //   // width: 800,
+    //   // height: 600
+    // }
   };
 
 var game = new Phaser.Game(config);
@@ -275,19 +275,9 @@ child.setMaxVelocity(200)
 
 })
 
-// this.physics.add.collider(manyRocks, platforms);
-
-// manyRocks.children.iterate(function (child) {
-// child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-// });
-
 }
-
-
 }
-
 }
-
 
 
 function update ()
@@ -320,7 +310,6 @@ if (cursors.up.isDown && player.body.touching.down)
   {
       player.body.velocity.y = -350;
   }
-
 }
 
 

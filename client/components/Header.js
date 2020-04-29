@@ -123,7 +123,7 @@ export class Header extends React.Component {
                     Donate Here
                   </button>
                 </div>
-                <div className="vegan">
+                <div>
                   <Iframe
                     url="https://en.wikipedia.org/wiki/Stone_Soup"
                     width="450px"
@@ -314,7 +314,7 @@ const Wrapper = styled.div`
   button {
     font-family: 'Helvetica Neue';
     font-weight: 200;
-    font-size: 25px;
+    font-size: 20px;
     background-color: rgba(42, 187, 155, 1);
     color: black;
     margin: 0px 10px 0px 10px;
@@ -325,13 +325,14 @@ const Wrapper = styled.div`
   .vegan {
     font-family: 'Helvetica Neue';
     font-weight: 200;
-    font-size: 25px;
+    font-size: 20px;
     color: black;
     // border-radius: 10%;
-    width: 450px;
-    height: 450px;
+    width: 430px;
+    height: 430px;
     border: 1px solid white;
     background-color: white;
+    padding: 10px 10px 10px 10px;
 }
 
 
@@ -348,8 +349,8 @@ button:hover {
 }
 
 .meatParent .thisPageImage{
-    width: 250px;
-    height: 250px;
+    width: 450px;
+    height: 450px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -359,14 +360,6 @@ button:hover {
     width: 100%;
     height: auto;
   }
-
-// .meatParent div{
-//   width: 250px;
-//   height: 250px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
 
 
 
