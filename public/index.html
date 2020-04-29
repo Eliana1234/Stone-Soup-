@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
     <script defer src="/bundle.js"></script>
   </head>
-<body style="display:flex; justify-content: center;">
+<body id="body" style="display:flex; justify-content: center;">
     <div id="app"></div>
     <script>
   var config = {
@@ -25,6 +25,12 @@
         create: create,
         update: update
     },
+    scale: {
+      // parent: "body",
+      mode: Phaser.Scale.FIT,
+      // width: 800,
+      // height: 600
+    }
   };
 
 var game = new Phaser.Game(config);
@@ -137,25 +143,25 @@ if (totalScore > highScore){
 }
 
 if (startGameCount === 0){
-startButton = this.add.text(300, 100, 'Start Game',{border: '#000', fontSize: '32px', fill: '#000' })
+startButton = this.add.text(275, 100, 'Start Game',{border: '#000', fontSize: '32px', fill: '#000' })
 startButton.setInteractive()
 startButton.on('pointerdown', () => startGame(manyRocks))
 startButton.on('pointerover', () => enterButtonHoverState() )
 startButton.on('pointerout', () => enterButtonRestState() );
 }
 else if (startGameCount > 0 && highScore === 0){
-gameOver = this.add.text(300, 100, 'Game over', { fontSize: '32px', fill: '#000' })
-highScoreReader = this.add.text(100, 125, `Don't let the rocks hit the ground!`, { fontSize: '32px', fill: '#000' })
-startButton = this.add.text(300, 150, 'restart game?',{ fontSize: '32px', fill: '#000' })
+gameOver = this.add.text(275, 100, 'Game over', { fontSize: '32px', fill: '#000' })
+highScoreReader = this.add.text(75, 125, `Don't let the stones hit the ground!`, { fontSize: '32px', fill: '#000' })
+startButton = this.add.text(275, 150, 'Play again',{ fontSize: '32px', fill: '#000' })
 startButton.setInteractive()
 startButton.on('pointerdown', () => startGame(manyRocks))
 startButton.on('pointerover', () => enterButtonHoverState() )
 startButton.on('pointerout', () => enterButtonRestState() );
 }
 else {
-gameOver = this.add.text(300, 100, 'Game over', { fontSize: '32px', fill: '#000' })
-highScoreReader = this.add.text(300, 125, `Your high score: ${highScore}`, { fontSize: '32px', fill: '#000' })
-startButton = this.add.text(300, 150, 'restart game?', { fontSize: '32px', fill: '#000' })
+gameOver = this.add.text(275, 100, 'Game over', { fontSize: '32px', fill: '#000' })
+highScoreReader = this.add.text(200, 125, `Your high score: ${highScore}`, { fontSize: '32px', fill: '#000' })
+startButton = this.add.text(275, 150, 'Play again', { fontSize: '32px', fill: '#000' })
 startButton.setInteractive()
 startButton.on('pointerdown', () => startGame(manyRocks))
 startButton.on('pointerover', () => enterButtonHoverState() )
